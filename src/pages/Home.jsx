@@ -45,6 +45,7 @@ const Home = () => {
   }, []);
 
   const likeCocktail = (like) => {
+    if (loading) return;
     const cocktails = JSON.parse(localStorage.getItem("cocktails"));
     cocktails[cocktails.length - 1].like = like;
     localStorage.setItem("cocktails", JSON.stringify(cocktails));
