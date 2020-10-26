@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -15,7 +15,7 @@ const Home = () => {
     localStorage.setItem("cocktails", JSON.stringify(cocktails));
   };
 
-  const fetchCocktail = () => {
+  const fetchCocktail = useCallback(() => {
     setLoading(true);
     setError(false);
 
@@ -42,7 +42,7 @@ const Home = () => {
         setError(true);
         setLoading(false);
       });
-  };
+  }, []);
 
   const likeCocktail = (like) => {
     const cocktails = JSON.parse(localStorage.getItem("cocktails"));
@@ -62,7 +62,7 @@ const Home = () => {
 
   useEffect(() => {
     fetchCocktail();
-  }, []);
+  }, [fetchCocktail]);
 
   return (
     <main>
