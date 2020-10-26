@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/cocktail-tinder/static/css/main.3bce1bd1.chunk.css",
-    "main.js": "/cocktail-tinder/static/js/main.e4247167.chunk.js",
-    "main.js.map": "/cocktail-tinder/static/js/main.e4247167.chunk.js.map",
+    "main.js": "/cocktail-tinder/static/js/main.fdacc4d2.chunk.js",
+    "main.js.map": "/cocktail-tinder/static/js/main.fdacc4d2.chunk.js.map",
     "runtime-main.js": "/cocktail-tinder/static/js/runtime-main.66001dd0.js",
     "runtime-main.js.map": "/cocktail-tinder/static/js/runtime-main.66001dd0.js.map",
     "static/js/2.f9033e4c.chunk.js": "/cocktail-tinder/static/js/2.f9033e4c.chunk.js",
@@ -15,6 +15,6 @@
     "static/js/runtime-main.66001dd0.js",
     "static/js/2.f9033e4c.chunk.js",
     "static/css/main.3bce1bd1.chunk.css",
-    "static/js/main.e4247167.chunk.js"
+    "static/js/main.fdacc4d2.chunk.js"
   ]
 }
