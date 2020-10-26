@@ -1,2 +1,0 @@
-(this["webpackJsonpcocktail-tinder"]=this["webpackJsonpcocktail-tinder"]||[]).push([[0],{10:function(t,n,e){"use strict";e.r(n);var c=e(0),i=e(1),r=e.n(i),o=e(3),s=e.n(o),d=function(){return Object(c.jsx)("h1",{children:"Cocktail Tinder"})},u=function(){return Object(c.jsx)(d,{})};e(9);s.a.render(Object(c.jsx)(r.a.StrictMode,{children:Object(c.jsx)(u,{})}),document.getElementById("root"))},9:function(t,n,e){}},[[10,1,2]]]);
-//# sourceMappingURL=main.f64a4197.chunk.js.map
