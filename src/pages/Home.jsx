@@ -22,6 +22,13 @@ const Home = () => {
     fetch("https://www.thecocktaildb.com/api/json/v1/1/random.php")
       .then((res) => res.json())
       .then((data) => {
+        const cocktails = localStorage.getItem("cocktails")
+          ? JSON.parse(localStorage.getItem("cocktails"))
+          : [];
+        if (cocktails.find((c) => c.id === data.drinks[0].idDrink)) {
+          fetchCocktail();
+          return;
+        }
         const currentCoktail = {
           id: data.drinks[0].idDrink,
           title: data.drinks[0].strDrink,
