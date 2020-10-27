@@ -2,8 +2,8 @@ import { types } from "./cocktails.actions";
 
 export const initialState = {
   pending: true,
+  error: false,
   cocktail: null,
-  error: null,
 };
 
 export default function reducer(state, action) {
@@ -12,7 +12,7 @@ export default function reducer(state, action) {
       return {
         ...state,
         pending: true,
-        error: null,
+        error: false,
       };
     case types.FETCH_COCKTAIL_ERROR:
       return {

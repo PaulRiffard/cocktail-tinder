@@ -11,8 +11,8 @@ const Home = () => {
   const [state, dispatch] = useReducer(CocktailReducer, initialState);
   const [cocktails, setCocktails] = useLocalStorage("cocktails", []);
 
-  const likeCocktail = (likedCocktail) => {
-    setCocktails([...cocktails, likedCocktail]);
+  const likeCocktail = () => {
+    setCocktails([...cocktails, state.cocktail]);
   };
 
   const retry = () => {
@@ -31,7 +31,7 @@ const Home = () => {
   };
 
   const swipeCocktail = (direction) => {
-    if (direction == "left") {
+    if (direction === "left") {
       retry();
     } else {
       likeCocktail();
@@ -49,7 +49,7 @@ const Home = () => {
       <button onClick={retry}>Je n'aime pas</button>
       {state.pending && <p>Chargement...</p>}
       {state.error && <p>Une erreur est survenue.</p>}
-      {!state.loading &&
+      {!state.pending &&
         !state.error &&
         state.cocktail &&
         renderCocktail(state.cocktail)}
