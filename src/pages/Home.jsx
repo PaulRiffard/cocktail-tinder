@@ -45,14 +45,15 @@ const Home = () => {
   return (
     <main>
       <h1>Cocktail Tinder</h1>
-      <button onClick={onLike}>J'aime</button>
-      <button onClick={retry}>Je n'aime pas</button>
       {state.pending && <p>Chargement...</p>}
       {state.error && <p>Une erreur est survenue.</p>}
       {!state.pending &&
         !state.error &&
         state.cocktail &&
         renderCocktail(state.cocktail)}
+      <button onClick={retry}>Je n'aime pas</button>
+      <button onClick={onLike}>J'aime</button>
+
     </main>
   );
 };
