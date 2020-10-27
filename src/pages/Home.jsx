@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import TinderCard from 'react-tinder-card'
+=======
+import React, { useState, useEffect, useCallback } from "react";
+>>>>>>> 384fe2f9c5fee44f5bad068215980dd8a77f3ee6
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -16,13 +20,20 @@ const Home = () => {
     localStorage.setItem("cocktails", JSON.stringify(cocktails));
   };
 
-  const fetchCocktail = () => {
+  const fetchCocktail = useCallback(() => {
     setLoading(true);
     setError(false);
 
     fetch("https://www.thecocktaildb.com/api/json/v1/1/random.php")
       .then((res) => res.json())
       .then((data) => {
+        const cocktails = localStorage.getItem("cocktails")
+          ? JSON.parse(localStorage.getItem("cocktails"))
+          : [];
+        if (cocktails.find((c) => c.id === data.drinks[0].idDrink)) {
+          fetchCocktail();
+          return;
+        }
         const currentCoktail = {
           id: data.drinks[0].idDrink,
           title: data.drinks[0].strDrink,
@@ -36,7 +47,7 @@ const Home = () => {
         setError(true);
         setLoading(false);
       });
-  };
+  }, []);
 
   const swipeCocktail = (direction) => {
     if (direction == "left") {
@@ -48,6 +59,7 @@ const Home = () => {
 
 
   const likeCocktail = (like) => {
+    if (loading) return;
     const cocktails = JSON.parse(localStorage.getItem("cocktails"));
     cocktails[cocktails.length - 1].like = like;
     localStorage.setItem("cocktails", JSON.stringify(cocktails));
@@ -70,7 +82,7 @@ const Home = () => {
 
   useEffect(() => {
     fetchCocktail();
-  }, []);
+  }, [fetchCocktail]);
 
   return (
     <main>
