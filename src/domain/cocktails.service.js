@@ -17,10 +17,12 @@ export function fetchCocktail(dispatch, cocktails) {
     .then((res) => res.drinks && res.drinks[0])
     .then((cocktail) => {
       if (cocktails.find((c) => c.idDrink === cocktail.idDrink)) {
-        dispatch(fetchCocktailPending());
+        fetchCocktail(dispatch, cocktails);
       } else {
         dispatch(fetchCocktailSuccess(cocktail));
       }
     })
-    .catch((error) => dispatch(fetchCocktailError(error)));
+    .catch((error) => {
+      dispatch(fetchCocktailError(error));
+    });
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from "react";
 import TinderCard from "react-tinder-card";
-import { useLocalStorage } from "../hooks/useLocalStorage";
+import { useCocktailsStorage } from "../hooks/useCocktailsStorage";
 import { fetchCocktail } from "../domain/cocktails.service";
 import {
   default as CocktailReducer,
@@ -9,10 +9,10 @@ import {
 
 const Home = () => {
   const [state, dispatch] = useReducer(CocktailReducer, initialState);
-  const [cocktails, setCocktails] = useLocalStorage("cocktails", []);
+  const [cocktails, likeCocktail] = useCocktailsStorage([]);
 
-  const likeCocktail = () => {
-    setCocktails([...cocktails, state.cocktail]);
+  const onLike = () => {
+    likeCocktail(state.cocktail);
   };
 
   const retry = () => {
@@ -34,18 +34,18 @@ const Home = () => {
     if (direction === "left") {
       retry();
     } else {
-      likeCocktail();
+      onLike();
     }
   };
 
   useEffect(() => {
-    fetchCocktail(dispatch, cocktails);
+    fetchCocktail(dispatch, state.cocktails);
   }, [cocktails]);
 
   return (
     <main>
       <h1>Cocktail Tinder</h1>
-      <button onClick={likeCocktail}>J'aime</button>
+      <button onClick={onLike}>J'aime</button>
       <button onClick={retry}>Je n'aime pas</button>
       {state.pending && <p>Chargement...</p>}
       {state.error && <p>Une erreur est survenue.</p>}
