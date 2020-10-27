@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import TinderCard from 'react-tinder-card'
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -37,6 +38,15 @@ const Home = () => {
       });
   };
 
+  const swipeCocktail = (direction) => {
+    if (direction == "left") {
+      likeCocktail(false)
+    } else {
+      likeCocktail(true)
+    }
+  }
+
+
   const likeCocktail = (like) => {
     const cocktails = JSON.parse(localStorage.getItem("cocktails"));
     cocktails[cocktails.length - 1].like = like;
@@ -44,12 +54,17 @@ const Home = () => {
     fetchCocktail();
   };
 
+
+
   const renderCocktail = () => {
+
     return (
-      <div className="cocktail">
-        <h2>{cocktail.title}</h2>
-        <img src={cocktail.imgSrc} alt={cocktail.title} />
-      </div>
+      <TinderCard onCardLeftScreen={(dir) => swipeCocktail(dir)}>
+        <div className="cocktail">
+          <h2>{cocktail.title}</h2>
+          <img src={cocktail.imgSrc} alt={cocktail.title} />
+        </div>
+      </TinderCard>
     );
   };
 
