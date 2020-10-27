@@ -1,97 +1,58 @@
-<<<<<<< HEAD
-import React, { useState, useEffect } from "react";
-import TinderCard from 'react-tinder-card'
-=======
-import React, { useState, useEffect, useCallback } from "react";
->>>>>>> 384fe2f9c5fee44f5bad068215980dd8a77f3ee6
+import React, { useEffect, useReducer } from "react";
+import TinderCard from "react-tinder-card";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { fetchCocktail } from "../domain/cocktails.service";
+import {
+  default as CocktailReducer,
+  initialState,
+} from "../domain/cocktails.reducer";
 
 const Home = () => {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [cocktail, setCocktail] = useState(null);
+  const [state, dispatch] = useReducer(CocktailReducer, initialState);
+  const [cocktails, setCocktails] = useLocalStorage("cocktails", []);
 
-  const stockCocktail = (currentCocktail) => {
-    if (!localStorage.getItem("cocktails")) {
-      localStorage.setItem("cocktails", JSON.stringify([currentCocktail]));
-      return;
-    }
-    const cocktails = JSON.parse(localStorage.getItem("cocktails"));
-    cocktails.push(currentCocktail);
-    localStorage.setItem("cocktails", JSON.stringify(cocktails));
+  const likeCocktail = (likedCocktail) => {
+    setCocktails([...cocktails, likedCocktail]);
   };
 
-  const fetchCocktail = useCallback(() => {
-    setLoading(true);
-    setError(false);
-
-    fetch("https://www.thecocktaildb.com/api/json/v1/1/random.php")
-      .then((res) => res.json())
-      .then((data) => {
-        const cocktails = localStorage.getItem("cocktails")
-          ? JSON.parse(localStorage.getItem("cocktails"))
-          : [];
-        if (cocktails.find((c) => c.id === data.drinks[0].idDrink)) {
-          fetchCocktail();
-          return;
-        }
-        const currentCoktail = {
-          id: data.drinks[0].idDrink,
-          title: data.drinks[0].strDrink,
-          imgSrc: data.drinks[0].strDrinkThumb,
-        };
-        setCocktail(currentCoktail);
-        stockCocktail(currentCoktail);
-        setLoading(false);
-      })
-      .catch(() => {
-        setError(true);
-        setLoading(false);
-      });
-  }, []);
-
-  const swipeCocktail = (direction) => {
-    if (direction == "left") {
-      likeCocktail(false)
-    } else {
-      likeCocktail(true)
-    }
-  }
-
-
-  const likeCocktail = (like) => {
-    if (loading) return;
-    const cocktails = JSON.parse(localStorage.getItem("cocktails"));
-    cocktails[cocktails.length - 1].like = like;
-    localStorage.setItem("cocktails", JSON.stringify(cocktails));
-    fetchCocktail();
+  const retry = () => {
+    fetchCocktail(dispatch, cocktails);
   };
 
-
-
-  const renderCocktail = () => {
-
+  const renderCocktail = (cocktail) => {
     return (
       <TinderCard onCardLeftScreen={(dir) => swipeCocktail(dir)}>
         <div className="cocktail">
-          <h2>{cocktail.title}</h2>
-          <img src={cocktail.imgSrc} alt={cocktail.title} />
+          <h2>{cocktail.strDrink}</h2>
+          <img src={cocktail.strDrinkThumb} alt={cocktail.strDrink} />
         </div>
       </TinderCard>
     );
   };
 
+  const swipeCocktail = (direction) => {
+    if (direction == "left") {
+      retry();
+    } else {
+      likeCocktail();
+    }
+  };
+
   useEffect(() => {
-    fetchCocktail();
-  }, [fetchCocktail]);
+    fetchCocktail(dispatch, cocktails);
+  }, [cocktails]);
 
   return (
     <main>
       <h1>Cocktail Tinder</h1>
-      <button onClick={() => likeCocktail(true)}>J'aime</button>
-      <button onClick={() => likeCocktail(false)}>Je n'aime pas</button>
-      {loading && <p>Chargement...</p>}
-      {error && <p>Une erreur est survenue.</p>}
-      {!loading && !error && renderCocktail()}
+      <button onClick={likeCocktail}>J'aime</button>
+      <button onClick={retry}>Je n'aime pas</button>
+      {state.pending && <p>Chargement...</p>}
+      {state.error && <p>Une erreur est survenue.</p>}
+      {!state.loading &&
+        !state.error &&
+        state.cocktail &&
+        renderCocktail(state.cocktail)}
     </main>
   );
 };
